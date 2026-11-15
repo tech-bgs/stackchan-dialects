@@ -1,0 +1,120 @@
+diff --git a/modules/network/services/chatAudioIO/ChatAudioIO.js b/modules/network/services/chatAudioIO/ChatAudioIO.js
+index 37fb903e0..4ffc39307 100644
+--- a/modules/network/services/chatAudioIO/ChatAudioIO.js
++++ b/modules/network/services/chatAudioIO/ChatAudioIO.js
+@@ -59,7 +59,7 @@ class ChatAudioIO {
+ 		this.ready = false;
+ 		
+ 		this.output = null;
+-		this.outputBufferSize = 512 * 1024;
++		this.outputBufferSize = 128 * 1024;
+ 		this.outputBuffer = new SharedArrayBuffer(this.outputBufferSize);
+ 		this.outputSampleRate = 24000;
+    		this.outputBufferHead = 0;
+@@ -107,7 +107,8 @@ class ChatAudioIO {
+ 				initial: 1024,
+ 				incremental: 256
+ 			},
+-			stack: 1024
++			stack: 1024,
++			nativeStack: 16 * 1024
+ 		});
+ 		this.worker.onmessage = message => {
+ 			this[message.id](message);
+@@ -184,6 +185,25 @@ class ChatAudioIO {
+ 	}
+ 	receiveAudio(message) {
+ 		this.outputBufferHead = message.offset + message.size;
++		this.statsIn = (this.statsIn ?? 0) + message.size;
++	}
++	traceOutputStats(requested, written) {
++		const now = Date.now();
++		const stats = this.stats ??= { at: now, last: now, calls: 0, empty: 0, out: 0, want: 0, gap: 0 };
++		stats.gap = Math.max(stats.gap, now - stats.last);
++		stats.last = now;
++		stats.calls++;
++		stats.want += requested;
++		stats.out += written;
++		if (!written)
++			stats.empty++;
++		if ((now - stats.at) < 1000)
++			return;
++		const buffered = (this.outputBufferHead - this.outputBufferTail) & (this.outputBufferSize - 1);
++		if ((this.statsIn ?? 0) || stats.out)
++			trace(`[ChatAudio] in=${this.statsIn ?? 0} out=${stats.out} want=${stats.want} buf=${buffered} calls=${stats.calls} empty=${stats.empty} maxGap=${stats.gap} state=${this.state}\n`);
++		this.statsIn = 0;
++		this.stats = { at: now, last: now, calls: 0, empty: 0, out: 0, want: 0, gap: 0 };
+ 	}
+ 	receiveFunctionCall(message) {
+ 		this.onFunctionCall(message.call, message.name, message.parameters);
+@@ -255,6 +275,7 @@ class ChatAudioIO {
+ 		this.output = new AudioOut({
+ 			sampleRate: this.outputSampleRate,
+ 			onWritable: (size) => {
++				const requested = size;
+ 				let start = this.outputBufferTail;
+ 				let stop = this.outputBufferHead;
+ 				let level = 0;
+@@ -292,6 +313,7 @@ class ChatAudioIO {
+ 					size -= delta;
+ 				}
+ 				this.outputBufferTail = start;
++				this.traceOutputStats(requested, requested - size);
+ 				Atomics.store(this.barrier, 0, start);
+ 				Atomics.notify(this.barrier, 0);
+ 
+diff --git a/modules/network/services/chatAudioIO/workers/elevenLabsAgentModel.js b/modules/network/services/chatAudioIO/workers/elevenLabsAgentModel.js
+index e98a1e403..a0c5abc6f 100644
+--- a/modules/network/services/chatAudioIO/workers/elevenLabsAgentModel.js
++++ b/modules/network/services/chatAudioIO/workers/elevenLabsAgentModel.js
+@@ -26,7 +26,7 @@ const audioSuffix = Object.freeze(new Uint8Array(ArrayBuffer.fromString('"}')),
+ 
+ export default class ElevenLabsAgentModel extends ChatWebSocketWorker {
+ 	constructor(options) {
+-		super(options);
++		super({ ...options, inputSampleRate: 8000, outputSampleRate: 16000 });
+ 		this.host = "api.elevenlabs.io";
+ 		this.path = "";
+ 		this.headers = [
+@@ -53,11 +53,14 @@ export default class ElevenLabsAgentModel extends ChatWebSocketWorker {
+ 		this.body = {
+ 			conversation_config: {
+ 				asr: {
+-					user_input_audio_format:"pcm_16000",
++					user_input_audio_format:"pcm_8000",
+ 				},
+ 				tts: {
+ 					agent_output_audio_format:"pcm_16000",
+ 				},
++				turn: {
++					turn_eagerness: "eager",
++				},
+ 				conversation: {
+ 					client_events: [
+ 						"audio",
+@@ -68,6 +71,7 @@ export default class ElevenLabsAgentModel extends ChatWebSocketWorker {
+ 					]
+ 				},
+ 				agent: {
++					language: "ko",
+ 					prompt: {
+ 						prompt,
+ 						llm: message.modelID ?? "claude-haiku-4-5",
+@@ -181,6 +185,7 @@ export default class ElevenLabsAgentModel extends ChatWebSocketWorker {
+ 	}	
+ 	onBase64(offset, size) {
+ 		super.onBase64(offset, size);
++		this.lastAudioTime = Date.now();
+ 		if (this.speaking) {
+ 			this.speaking = false;
+ 			this.post("listen");
+@@ -225,6 +230,9 @@ export default class ElevenLabsAgentModel extends ChatWebSocketWorker {
+ 		this.sendJSON({ type:"pong", event_id });
+ 		if (this.speaking)
+ 			return;
++		// pings also arrive between audio chunks: only end the turn once audio has stopped
++		if ((Date.now() - this.lastAudioTime) < 1500)
++			return;
+ 		this.parser.copy(this.silence);
+ 		this.parser.done();
+ 		this.speaking = true;
