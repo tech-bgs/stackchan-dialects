@@ -1,0 +1,27 @@
+{
+  "include": [
+    "./manifest_m5stackchan_cores3.json"
+  ],
+  "config": {
+    "ssid": "YOUR_WIFI_NAME",
+    "password": "YOUR_WIFI_PASSWORD",
+    "chatType": "elevenLabsAgent",
+    "chatProviderID": "YOUR_ELEVENLABS_API_KEY",
+    "chatVoiceID": "YOUR_ELEVENLABS_VOICE_ID",
+    "chatInstructions": "PASTE_A_PROMPT_FROM_prompts_FOLDER (or run tools/apply_dialect.py)",
+    "chatRecordMs": 1200,
+    "commandListLength": 2048,
+    "driver": {
+      "type": "m5stackchan"
+    },
+    "tts": {
+      "type": "elevenlabs",
+      "voice": "YOUR_ELEVENLABS_VOICE_ID",
+      "model": "eleven_multilingual_v2",
+      "format": "mp3_22050_32",
+      "volume": 0.8,
+      "token": "YOUR_ELEVENLABS_API_KEY",
+      "latency": 2
+    }
+  }
+}

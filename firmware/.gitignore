@@ -1,0 +1,12 @@
+/node_modules/
+/tmp/
+/scripts/key.json
+/docs/api
+/dist/
+/dist-tests/
+
+# Bundle file
+/stackchan/tech.moddable.stackchan*
+
+# local settings with Wi-Fi password and API keys
+/stackchan/manifest_local.json

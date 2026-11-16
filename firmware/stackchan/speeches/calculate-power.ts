@@ -1,0 +1,5 @@
+// @ts-nocheck
+function calculatePower(sample: ArrayBuffer): number {
+  return native('xs_calculatePower').call(this, sample)
+}
+export default calculatePower

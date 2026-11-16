@@ -1,0 +1,13 @@
+{
+  "include": ["$(MODDABLE)/modules/io/audioin/manifest.json"],
+  "modules": {
+    "*": ["./microphone"]
+  },
+  "preload": ["microphone"],
+  "defines": {
+    "audioIn": {
+      "sampleRate": 16000,
+      "bitsPerSample": 16
+    }
+  }
+}

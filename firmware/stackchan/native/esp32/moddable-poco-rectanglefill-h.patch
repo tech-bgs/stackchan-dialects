@@ -1,0 +1,11 @@
+--- a/modules/commodetto/commodettoPocoBlit.c
++++ b/modules/commodetto/commodettoPocoBlit.c
+@@ -482,7 +482,7 @@ void PocoRectangleFill(Poco poco, PocoColor color, uint8_t blend, PocoCoordinate
+ #endif
+ 		bd->blend = blend >> 3;		// 5 bit blend level
+ 	}
+-	pc->x = x, pc->y = y, pc->w = w, pc->h;
++	pc->x = x, pc->y = y, pc->w = w, pc->h = h;
+ 
+ 	PocoCommandBuilt(poco, pc);
+ #if MODDEF_STACKCHAN_PHOTO_FLUSH_TRACE

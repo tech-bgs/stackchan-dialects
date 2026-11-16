@@ -1,0 +1,32 @@
+--- a/modules/drivers/ili9341/modIli9341.c
++++ b/modules/drivers/ili9341/modIli9341.c
+@@ -440,10 +440,18 @@ void xs_ILI9341_close(xsMachine *the)
+ 	xsmcSetHostData(xsThis, NULL);
+ }
+ 
++#if MODDEF_STACKCHAN_PHOTO_FLUSH_TRACE
++extern void stackchanPhotoFlushIli9341DoSend(void *pixels, int byteLength);
++extern void stackchanPhotoFlushIli9341Begin(int x, int y, int w, int h);
++#endif
++
+ #if kCommodettoBitmapFormat == kCommodettoBitmapRGB565LE
+ // caller provides little-endian pixels, convert to big-endian for display
+ void ili9341Send_16LE(PocoPixel *pixels, int byteLength, void *refcon)
+ {
+ 	spiDisplay sd = refcon;
++#if MODDEF_STACKCHAN_PHOTO_FLUSH_TRACE
++	stackchanPhotoFlushIli9341DoSend((void *)pixels, byteLength);
++#endif
+ 	modSPISetSync(&sd->spiConfig, byteLength > 0);
+ 	modSPITxSwap16(&sd->spiConfig, (void *)pixels, (byteLength < 0) ? -byteLength : byteLength);
+ }
+@@ -592,6 +600,10 @@ void ili9341Begin(void *refcon, CommodettoCoordinate x, CommodettoCoordinate y,
+ 	uint8_t data[4];
+ 	uint16_t xMin, xMax, yMin, yMax;
+ 
++#if MODDEF_STACKCHAN_PHOTO_FLUSH_TRACE
++	stackchanPhotoFlushIli9341Begin((int)x, (int)y, (int)w, (int)h);
++#endif
++
+ 	xMin = x + MODDEF_ILI9341_COLUMN_OFFSET;
+ 	yMin = y + MODDEF_ILI9341_ROW_OFFSET;

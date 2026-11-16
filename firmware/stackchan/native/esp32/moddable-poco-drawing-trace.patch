@@ -1,0 +1,56 @@
+--- a/modules/commodetto/commodettoPocoBlit.c
++++ b/modules/commodetto/commodettoPocoBlit.c
+@@ -32,6 +32,12 @@
+ #endif
+ #include "commodettoPocoBlit.h"
+ 
++#if MODDEF_STACKCHAN_PHOTO_FLUSH_TRACE
++extern void stackchanPhotoPocoRenderCommand(void *poco, int command, int x, int y, int w, int h);
++extern void stackchanPhotoPocoAfterRender(void *poco, int command, void *dst, int rowBytes, int drawW, int drawH, int slabX, int slabY);
++extern void stackchanPhotoPocoBitmapSrc(void *poco, void *srcPixels, int rowPixels, int w, int h);
++#endif
++
+ #if MODDEF_POCO_LOGOVERFLOW || MODDEF_POCO_LOG
+ 	static void logDisplayList(Poco poco);
+ #else
+@@ -1468,6 +1474,10 @@ void doDrawBitmap(Poco poco, PocoCommand pc, PocoPixel *dst, PocoDimension h)
+ 	PocoPixel *src = srcBits->pixels;
+ 	PocoCoordinate srcRowPixels = srcBits->rowPixels;
+ 
++#if MODDEF_STACKCHAN_PHOTO_FLUSH_TRACE
++	stackchanPhotoPocoBitmapSrc(poco, src, (int)srcRowPixels, (int)srcBits->w, (int)h);
++#endif
++
+ 	while (h--) {
+ 		c_memcpy(dst, src, count);	// inline could be faster? (seems no)
+ 		dst = (PocoPixel *)(poco->rowBytes + (char *)dst);
+@@ -3553,9 +3563,27 @@ int PocoDrawingEnd(Poco poco, PocoPixel *pixels, int byteLength, PocoRenderedPixel
+ 				h = yMax - y;
+ 
+ #if 4 != kPocoPixelSize
+-			(gDrawRenderCommand[walker->command])(poco, walker, pixels + ((y - yMin) * poco->w) + walker->x, h);
++			{
++				PocoPixel *dst = pixels + ((y - yMin) * poco->w) + walker->x;
++#if MODDEF_STACKCHAN_PHOTO_FLUSH_TRACE
++				stackchanPhotoPocoRenderCommand(poco, (int)walker->command, (int)walker->x, (int)y, (int)walker->w, (int)h);
++#endif
++				(gDrawRenderCommand[walker->command])(poco, walker, dst, h);
++#if MODDEF_STACKCHAN_PHOTO_FLUSH_TRACE
++				stackchanPhotoPocoAfterRender(poco, (int)walker->command, dst, (int)poco->rowBytes, (int)walker->w, (int)h, (int)walker->x, (int)(y - yMin));
++#endif
++			}
+ #else
+-			(gDrawRenderCommand[walker->command])(poco, walker, pixels + ((y - yMin) * rowBytes) + walker->x, h);
++			{
++				PocoPixel *dst = pixels + ((y - yMin) * rowBytes) + walker->x;
++#if MODDEF_STACKCHAN_PHOTO_FLUSH_TRACE
++				stackchanPhotoPocoRenderCommand(poco, (int)walker->command, (int)walker->x, (int)y, (int)walker->w, (int)h);
++#endif
++				(gDrawRenderCommand[walker->command])(poco, walker, dst, h);
++#if MODDEF_STACKCHAN_PHOTO_FLUSH_TRACE
++				stackchanPhotoPocoAfterRender(poco, (int)walker->command, dst, (int)rowBytes, (int)walker->w, (int)h, (int)walker->x, (int)(y - yMin));
++#endif
++			}
+ #endif
+ 		}
+ 

@@ -1,0 +1,18 @@
+{
+  "modules": {
+    "*": ["../typings/*"],
+    "piu/*": ["../typings/piu/*"],
+    "timer": ["../node_modules/@moddable/typings/timer"],
+    "neostrand": ["../node_modules/@moddable/typings/neostrand"],
+    "single-wait-slot": ["../node_modules/@moddable/typings/single-wait-slot"],
+    "btutils": ["../node_modules/@moddable/typings/btutils"],
+    "fetch": ["../typings/fetch"],
+    "stackchan-util": ["./utilities/stackchan-util"],
+    "mc/config": ["../node_modules/@moddable/typings/mc/config"],
+    "modules": ["../node_modules/@moddable/typings/modules"],
+    "embedded:io/serial": [
+      "../node_modules/@moddable/typings/embedded_io/serial"
+    ],
+    "embedded:io/pwm": ["../node_modules/@moddable/typings/embedded_io/pwm"]
+  }
+}

@@ -1,5 +1,11 @@
 # 남의 코드와 서비스
 
+## 스택찬 펌웨어 (firmware/ 폴더)
+
+- 원본: https://github.com/stack-chan/stack-chan
+- 라이선스: Apache License 2.0 ([firmware/LICENSE](firmware/LICENSE))
+- 바꾼 내용은 [firmware/NOTICE.md](firmware/NOTICE.md)에 적었어요.
+
 ## Moddable SDK (patches/ 폴더)
 
 - 원본: https://github.com/Moddable-OpenSource/moddable
@@ -13,5 +19,4 @@
 ## 쓴 서비스와 하드웨어 (코드는 들어 있지 않음)
 
 - ElevenLabs Conversational AI: 목소리와 실시간 대화. 이용약관은 ElevenLabs를 따릅니다.
-- 스택찬 (Stack-chan): https://github.com/stack-chan/stack-chan
 - M5Stack CoreS3

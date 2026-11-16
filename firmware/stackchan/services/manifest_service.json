@@ -1,0 +1,49 @@
+{
+  "include": [
+    "$(MODDABLE)/examples/manifest_base.json",
+    "$(MODDABLE)/examples/manifest_net.json",
+    "$(MODDABLE)/examples/manifest_typings.json",
+    "$(MODDABLE)/examples/io/tcp/websocket/manifest_websocket.json",
+    "$(MODULES)/network/ble/manifest_server.json",
+    "$(MODULES)/network/ble/manifest_client.json",
+    "$(MODULES)/network/mdns/manifest.json",
+    "../utilities/manifest_utility.json",
+    "./http-server/manifest.json",
+    "./mcp-server/manifest.json",
+    "./mcp-client/manifest.json"
+  ],
+  "modules": {
+    "*": [
+      "./*",
+      "$(MODULES)/network/ble/uart/uartserver",
+      "../../typings/btutils",
+      "../../typings/uartserver"
+    ],
+    "ChatAudioIO": "./chat-audioio-stub"
+  },
+  "platforms": {
+    "esp32/m5stack_cores3": {
+      "include": ["$(MODULES)/network/services/chatAudioIO/manifest.json"],
+      "modules": {
+        "ChatAudioIO": "./chat-audioio-cores3",
+        "ChatWebSocketWorker": "./chat-web-socket-worker"
+      }
+    },
+    "mac": {
+      "include": ["$(MODULES)/network/services/chatAudioIO/manifest.json"],
+      "modules": {
+        "ChatAudioIO": "$(MODULES)/network/services/chatAudioIO/ChatAudioIO"
+      }
+    }
+  },
+  "ble": {
+    "*": ["$(MODULES)/network/ble/uart/bleservices/*"]
+  },
+  "typescript": {
+    "tsconfig": {
+      "compilerOptions": {
+        "noImplicitAny": false
+      }
+    }
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "include": ["$(MODDABLE)/modules/io/imagein/camera/manifest.json"],
+  "platforms": {
+    "esp32": {
+      "modules": {
+        "*": [
+          "$(MODDABLE)/modules/io/common/builtinCommon",
+          "./native/esp32/camera"
+        ],
+        "embedded:io/image/in/camera": "./native/esp32/camera",
+        "photo-capture": "./photo-capture"
+      }
+    },
+    "esp32/m5stack_cores3": {
+      "modules": {
+        "embedded:io/system": "$(MODDABLE)/modules/io/system/system",
+        "photo-capture": "./photo-capture",
+        "photo-save": "./photo-save",
+        "photo-save-bmp": "./photo-save-bmp",
+        "photo-sd-boot": "./photo-sd-boot",
+        "photo-sd-power": "./photo-sd-power",
+        "camera-i2c-bus": "./camera-i2c-bus",
+        "runtime-bitmap-port": "./runtime-bitmap-port",
+        "photo-graphics-diagnostics": "./photo-graphics-diagnostics",
+        "photo-display-diagnostics": "./photo-display-diagnostics",
+        "photo-lcd-overwrite": "./photo-lcd-overwrite",
+        "photo-storage": "./native/esp32/photo-storage"
+      },
+      "build": {
+        "C_FLAGS_SUBPLATFORM": "-I$(IDF_PATH)/components/sdmmc/include\\t-I$(IDF_PATH)/components/esp_driver_sdspi/include"
+      },
+      "dependency": [
+        { "idf": "fatfs" },
+        { "idf": "wear_levelling" },
+        { "idf": "sdmmc" },
+        { "idf": "esp_driver_sdspi" },
+        { "idf": "driver" }
+      ],
+      "config": {
+        "camera": {
+          "frameSize": "QVGA"
+        }
+      },
+      "defines": {
+        "stackchan_photo_flush_trace": 1,
+        "photo_sd": {
+          "mosi": 37,
+          "miso": 35,
+          "sck": 36,
+          "cs": 4
+        },
+        "camera": {
+          "powerdown": -1,
+          "reset": -1,
+          "xclk": 2,
+          "pclk": 45,
+          "href": 38,
+          "vsync": 46,
+          "scl": 11,
+          "sda": 12,
+          "i2c_port": 1,
+          "d0": 39,
+          "d1": 40,
+          "d2": 41,
+          "d3": 42,
+          "d4": 15,
+          "d5": 16,
+          "d6": 48,
+          "d7": 47
+        }
+      }
+    },
+    "esp32/m5stackchan_cores3": {
+      "modules": {
+        "embedded:io/system": "$(MODDABLE)/modules/io/system/system",
+        "photo-capture": "./photo-capture",
+        "photo-save": "./photo-save",
+        "photo-save-bmp": "./photo-save-bmp",
+        "photo-sd-boot": "./photo-sd-boot",
+        "photo-sd-power": "./photo-sd-power",
+        "camera-i2c-bus": "./camera-i2c-bus",
+        "runtime-bitmap-port": "./runtime-bitmap-port",
+        "photo-graphics-diagnostics": "./photo-graphics-diagnostics",
+        "photo-display-diagnostics": "./photo-display-diagnostics",
+        "photo-lcd-overwrite": "./photo-lcd-overwrite",
+        "photo-storage": "./native/esp32/photo-storage"
+      },
+      "build": {
+        "C_FLAGS_SUBPLATFORM": "-I$(IDF_PATH)/components/sdmmc/include\\t-I$(IDF_PATH)/components/esp_driver_sdspi/include"
+      },
+      "dependency": [
+        { "idf": "fatfs" },
+        { "idf": "wear_levelling" },
+        { "idf": "sdmmc" },
+        { "idf": "esp_driver_sdspi" },
+        { "idf": "driver" }
+      ],
+      "config": {
+        "camera": {
+          "frameSize": "QVGA"
+        }
+      },
+      "defines": {
+        "stackchan_photo_flush_trace": 1,
+        "photo_sd": {
+          "mosi": 37,
+          "miso": 35,
+          "sck": 36,
+          "cs": 4
+        },
+        "camera": {
+          "powerdown": -1,
+          "reset": -1,
+          "xclk": 2,
+          "pclk": 45,
+          "href": 38,
+          "vsync": 46,
+          "scl": 11,
+          "sda": 12,
+          "i2c_port": 1,
+          "d0": 39,
+          "d1": 40,
+          "d2": 41,
+          "d3": 42,
+          "d4": 15,
+          "d5": 16,
+          "d6": 48,
+          "d7": 47
+        }
+      }
+    }
+  }
+}

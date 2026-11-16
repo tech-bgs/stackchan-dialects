@@ -1,0 +1,151 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "strictNullChecks": false,
+    "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": true,
+    "module": "es2022",
+    "lib": [
+      "es2024"
+    ],
+    "outDir": "dist",
+    "sourceMap": true,
+    "target": "es2024",
+    "paths": {
+      "face-context": [
+        "./stackchan/renderers-piu/face-context"
+      ],
+      "effects/*": [
+        "./stackchan/renderers-piu/effects/*"
+      ],
+      "renderer-compat": [
+        "./stackchan/renderers-piu/renderer-compat"
+      ],
+      "renderer-simple": [
+        "./stackchan/renderers-piu/renderer-simple"
+      ],
+      "renderer-dog": [
+        "./stackchan/renderers-piu/renderer-dog"
+      ],
+      "renderer-small": [
+        "./stackchan/renderers-piu/renderer-small"
+      ],
+      "behaviors/*": [
+        "./stackchan/renderers-piu/behaviors/*"
+      ],
+      "parts/*": [
+        "./stackchan/renderers-piu/parts/*"
+      ],
+      "motions/*": [
+        "./stackchan/renderers-piu/motions/*"
+      ],
+      "drawer": [
+        "./stackchan/renderers-piu/drawer"
+      ],
+      "mocks/*": [
+        "./tests/chats/mocks/*"
+      ],
+      "*": [
+        "./node_modules/@moddable/typings/*",
+        "./node_modules/@moddable/typings/ble/*",
+        "./typings/*",
+        "./stackchan/*",
+        "./stackchan/ble/*",
+        "./stackchan/default-mods/*",
+        "./stackchan/dialogues/*",
+        "./stackchan/drivers/*",
+        "./stackchan/led/*",
+        "./stackchan/renderers-piu/*",
+        "./stackchan/renderers/*",
+        "./stackchan/services/*",
+        "./stackchan/speeches/*",
+        "./stackchan/transcriptions/*",
+        "./stackchan/utilities/*"
+      ],
+      "commodetto/*": [
+        "./node_modules/@moddable/typings/commodetto/*"
+      ],
+      "dns/*": [
+        "./node_modules/@moddable/typings/dns/*"
+      ],
+      "mc/*": [
+        "./node_modules/@moddable/typings/mc/*"
+      ],
+      "mod/*": [
+        "./node_modules/@moddable/typings/mod/*"
+      ],
+      "pins/*": [
+        "./node_modules/@moddable/typings/pins/*"
+      ],
+      "piu/*": [
+        "./node_modules/@moddable/typings/piu/*"
+      ],
+      "text/*": [
+        "./node_modules/@moddable/typings/text/*"
+      ],
+      "embedded:provider/*": [
+        "./node_modules/@moddable/typings/embedded_provider/*"
+      ],
+      "embedded:io/*": [
+        "./node_modules/@moddable/typings/embedded_io/*"
+      ],
+      "embedded:io/audio/*": [
+				"./node_modules/@moddable/typings/embedded_io/audio/*"
+			],
+      "embedded:io/bluetooth/*": [
+				"./node_modules/@moddable/typings/embedded_io/bluetooth/*"
+			],
+      "embedded:io/socket/*": [
+        "./node_modules/@moddable/typings/embedded_io/socket/*"
+      ],
+      "embedded:network/http/*": [
+        "./node_modules/@moddable/typings/embedded_network/http/*"
+      ],
+      "embedded:network/interface/*": [
+				"./node_modules/@moddable/typings/embedded_network/interface/*"
+			],
+      "embedded:network/mqtt/*": [
+        "./node_modules/@moddable/typings/embedded_network/mqtt/*"
+      ],
+      "embedded:network/websocket/*": [
+				"./node_modules/@moddable/typings/embedded_network/websocket/*"
+			],
+      "embedded:network/dns/resolver/*": [
+        "./node_modules/@moddable/typings/embedded_network/dns/resolver/*"
+      ],
+      "default-mods/mod": [
+        "./stackchan/default-mods/mod"
+      ],
+      "default-mods/on-launch": [
+        "./stackchan/default-mods/on-launch"
+      ],
+      "calculate-power": [
+        "./stackchan/speeches/calculate-power"
+      ],
+      "mac-address": [
+        "./utilities/esp32/mac-address"
+      ],
+      "default-mods/on-robot-created": [
+        "./stackchan/default-mods/on-robot-created"
+      ],
+      "mcp-client": [
+        "./stackchan/services/mcp-client/mcp-client"
+      ]
+    },
+    "types": [
+      "./node_modules/@moddable/typings/xs",
+      "./node_modules/@moddable/typings/mcpack",
+      "./node_modules/@moddable/typings/easing"
+    ]
+  },
+  "include": [
+    "./stackchan/**/*",
+    "./mods/**/*",
+    "./tests/**/*"
+  ]
+}

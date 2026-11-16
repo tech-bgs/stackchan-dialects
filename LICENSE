@@ -21,6 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ---
-This license covers the prompts and documentation in this repository.
-Files in patches/ modify the Moddable SDK and are not covered by this
-license; see THIRD_PARTY.md.
+This license covers the prompts, documentation and tools/ in this repository.
+firmware/ is derived from Stack-chan (Apache-2.0, see firmware/LICENSE) and
+patches/ modifies the Moddable SDK (LGPL-3.0-or-later). Neither is covered by
+this license; see THIRD_PARTY.md.
